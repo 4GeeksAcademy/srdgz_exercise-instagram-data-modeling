@@ -12,7 +12,6 @@ class Follower(Base):
     id= Column(Integer, primary_key=True, autoincrement=True)
     user_from_id = Column(Integer, ForeignKey('user.id'))
     user_to_id = Column(Integer, ForeignKey('user.id'))
-    user = relationship('User')
 
 class User(Base):
     __tablename__ = 'user'
@@ -28,13 +27,13 @@ class Media(Base):
     type = Column(String(50), nullable=False)
     url = Column(String(50), nullable=False)
     post_id = Column(Integer, ForeignKey('post.id'), nullable=False)
-    post = relationship('Post')
+    post = relationship('Post', backref='post')
 
 class Post(Base):
     __tablename__ = 'post'
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
-    user = relationship('User')
+    user = relationship('User', backref='user')
 
 class Comment(Base):
     __tablename__ = 'comment'
@@ -42,8 +41,8 @@ class Comment(Base):
     comment_text = Column(String(250), nullable=False)
     author_id = Column(Integer, ForeignKey('user.id'), nullable=False)
     post_id = Column(Integer, ForeignKey('post.id'), nullable=False)
-    post = relationship('Post')
-    user = relationship('User')
+    post = relationship('Post', backref='post')
+    user = relationship('User', backref='user')
 
 
     def to_dict(self):
