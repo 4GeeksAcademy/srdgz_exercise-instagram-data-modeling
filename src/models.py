@@ -20,6 +20,8 @@ class User(Base):
     firstname = Column(String(50), nullable=False)
     lastname = Column(String(50))
     email = Column(String(50), unique=True, nullable=False)
+    post = relationship('Post', backref='user')
+    author = relationship('Comment', backref='user')
 
 class Media(Base):
     __tablename__ = 'media'
@@ -27,13 +29,13 @@ class Media(Base):
     type = Column(String(50), nullable=False)
     url = Column(String(50), nullable=False)
     post_id = Column(Integer, ForeignKey('post.id'), nullable=False)
-    post = relationship('Post', backref='post')
+    post = relationship('Post', backref='media')
 
 class Post(Base):
     __tablename__ = 'post'
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
-    user = relationship('User', backref='user')
+    comment = relationship('Comment', backref='post')
 
 class Comment(Base):
     __tablename__ = 'comment'
@@ -41,8 +43,7 @@ class Comment(Base):
     comment_text = Column(String(250), nullable=False)
     author_id = Column(Integer, ForeignKey('user.id'), nullable=False)
     post_id = Column(Integer, ForeignKey('post.id'), nullable=False)
-    post = relationship('Post', backref='post')
-    user = relationship('User', backref='user')
+   
 
 
     def to_dict(self):
